@@ -1,0 +1,47 @@
+Table organization {
+  id uuid [pk]
+  name varchar
+  slug varchar
+  description text
+  logo_url varchar
+  website varchar
+  status varchar
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table user {
+  id uuid [pk]
+  organization_id uuid
+  full_name varchar
+  email varchar
+  password_hash varchar
+  avatar_url varchar
+  status varchar
+  last_login timestamp
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table role {
+  id uuid [pk]
+  organization_id uuid
+  name varchar
+  description text
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table membership {
+  id uuid [pk]
+  user_id uuid
+  role_id uuid
+  joined_at timestamp
+  created_at timestamp
+  updated_at timestamp
+}
+
+Ref: user.organization_id > organization.id
+Ref: role.organization_id > organization.id
+Ref: membership.user_id > user.id
+Ref: membership.role_id > role.id
