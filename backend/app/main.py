@@ -1,22 +1,26 @@
 from fastapi import FastAPI
 
+from app.core.config import settings
+
 app = FastAPI(
-    title="AI Operating Agent",
-    version="0.1.0",
-    description="Enterprise AI Operating Agent Platform"
+    title=settings.app_name,
+    version=settings.app_version,
+    description="Enterprise AI Operating Agent Platform",
 )
 
 
 @app.get("/")
 def root():
     return {
-        "project": "AI Operating Agent",
-        "status": "running"
+        "project": settings.app_name,
+        "version": settings.app_version,
+        "environment": settings.app_env,
+        "status": "running",
     }
 
 
 @app.get("/health")
 def health():
     return {
-        "status": "healthy"
+        "status": "healthy",
     }
