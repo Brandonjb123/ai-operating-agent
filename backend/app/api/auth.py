@@ -11,7 +11,9 @@ from sqlalchemy.orm import Session
 from app.dependencies.database import get_db
 from app.dependencies.organization import get_default_organization_id
 from app.auth.service import AuthService
-from app.schemas.auth import UserRegisterRequest, UserLoginRequest, TokenResponse
+from app.auth.dependencies import get_current_user
+from app.schemas.auth import UserRegisterRequest, UserLoginRequest, TokenResponse, UserMeResponse
+from app.models.user import User
 
 router = APIRouter(prefix="/auth", tags=["Authentication"])
 
@@ -39,3 +41,17 @@ def login(
     """
     auth_service = AuthService(db)
     return auth_service.login_user(request)
+
+
+@router.get("/me")
+def get_me(current_user: User = Depends(get_current_user)):
+    """
+    Mengembalikan data pengguna yang sedang login.
+    Password tidak disertakan.
+    """
+    return {
+        "id": current_user.id,
+        "email": current_user.email,
+        "full_name": current_user.full_name,
+        "status": current_user.status,
+    }

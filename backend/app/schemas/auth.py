@@ -29,3 +29,13 @@ class TokenResponse(BaseModel):
     """
     access_token: str = Field(..., description="JWT access token")
     token_type: str = Field(default="Bearer", description="Tipe token (default Bearer)")
+
+
+class UserMeResponse(BaseModel):
+    """Schema untuk response data user yang sedang login."""
+    id: UUID
+    email: str
+    full_name: str
+    status: str
+
+    model_config = {"from_attributes": True}    
