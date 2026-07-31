@@ -1,51 +1,50 @@
 """
-Authentication Service Layer.
-Berisi business logic untuk registrasi dan login.
-Saat ini berupa skeleton dengan TODO untuk implementasi selanjutnya.
+Authentication Service Layer — sudah terintegrasi dengan UserRepository,
+hashing password, JWT, dan mendukung organization_id.
 """
 
+from uuid import UUID
+from sqlalchemy.orm import Session
+
+from app.auth.security import hash_password, verify_password
+from app.auth.jwt import create_access_token
+from app.models.user import User
+from app.repositories.user_repository import UserRepository
 from app.schemas.auth import UserRegisterRequest, UserLoginRequest, TokenResponse
 
 
 class AuthService:
-    """
-    Service class untuk menangani logika autentikasi.
-    Belum mengakses database atau repository.
-    """
+    def __init__(self, db: Session) -> None:
+        self.db = db
+        self.user_repository = UserRepository(db)
 
-    def register_user(self, request: UserRegisterRequest) -> TokenResponse:
-        """
-        Mendaftarkan pengguna baru.
+    def register_user(
+        self, request: UserRegisterRequest, organization_id: UUID | None = None
+    ) -> TokenResponse:
+        if self.user_repository.exists_by_email(request.email):
+            raise ValueError("Email already exists")
 
-        Args:
-            request (UserRegisterRequest): Data pendaftaran (full_name, email, password).
+        hashed_password = hash_password(request.password)
 
-        Returns:
-            TokenResponse: Token akses setelah registrasi berhasil.
-        """
-        # TODO:
-        # 1. Validasi email uniqueness (panggil repository)
-        # 2. Hash password menggunakan hash_password() dari security.py
-        # 3. Simpan user ke database (via repository)
-        # 4. Buat JWT access token menggunakan create_access_token() dari jwt.py
-        # 5. Kembalikan TokenResponse
-        raise NotImplementedError("register_user belum diimplementasikan")
+        new_user = User(
+            full_name=request.full_name,
+            email=request.email,
+            password_hash=hashed_password,
+            organization_id=organization_id,
+            status="active",   # ← tambahkan ini
+        )
+
+        created_user = self.user_repository.create(new_user)
+        token = create_access_token(data={"sub": created_user.email})
+        return TokenResponse(access_token=token, token_type="Bearer")
 
     def login_user(self, request: UserLoginRequest) -> TokenResponse:
-        """
-        Melakukan autentikasi pengguna.
+        user = self.user_repository.get_by_email(request.email)
+        if user is None:
+            raise ValueError("Invalid email or password")
 
-        Args:
-            request (UserLoginRequest): Data login (email, password).
+        if not verify_password(request.password, user.password_hash):
+            raise ValueError("Invalid email or password")
 
-        Returns:
-            TokenResponse: Token akses setelah login berhasil.
-        """
-        # TODO:
-        # 1. Cari user berdasarkan email (via repository)
-        # 2. Jika tidak ditemukan, raise AuthenticationException
-        # 3. Verifikasi password menggunakan verify_password() dari security.py
-        # 4. Jika password salah, raise AuthenticationException
-        # 5. Buat JWT access token menggunakan create_access_token() dengan payload {"sub": user.email}
-        # 6. Kembalikan TokenResponse
-        raise NotImplementedError("login_user belum diimplementasikan")
+        token = create_access_token(data={"sub": user.email})
+        return TokenResponse(access_token=token, token_type="Bearer")
