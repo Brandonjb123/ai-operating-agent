@@ -4,6 +4,7 @@ from app.core.config import settings
 from app.api import auth
 from app.api import organization
 from app.api import role
+from app.api import membership
 
 app = FastAPI(
     title=settings.app_name,
@@ -15,6 +16,7 @@ app = FastAPI(
 app.include_router(auth.router)
 app.include_router(organization.router)
 app.include_router(role.router)
+app.include_router(membership.router)
 
 @app.get("/")
 def root():
