@@ -3,6 +3,7 @@ from fastapi import FastAPI
 from app.core.config import settings
 from app.api import auth
 from app.api import organization
+from app.api import role
 
 app = FastAPI(
     title=settings.app_name,
@@ -13,6 +14,7 @@ app = FastAPI(
 # Daftarkan router autentikasi
 app.include_router(auth.router)
 app.include_router(organization.router)
+app.include_router(role.router)
 
 @app.get("/")
 def root():
