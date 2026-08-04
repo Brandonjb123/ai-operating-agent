@@ -1,6 +1,5 @@
 from sqlalchemy import String, Text
-from sqlalchemy.orm import Mapped, mapped_column
-
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.database.base_model import BaseModel
 from uuid import UUID
 
@@ -21,3 +20,5 @@ class Organization(BaseModel):
     website: Mapped[str | None]
 
     status: Mapped[str]
+
+    ai_employees = relationship("AIEmployee", back_populates="organization")
