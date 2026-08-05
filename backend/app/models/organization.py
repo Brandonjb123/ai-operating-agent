@@ -22,3 +22,4 @@ class Organization(BaseModel):
     status: Mapped[str]
 
     ai_employees = relationship("AIEmployee", back_populates="organization")
+    memories = relationship("Memory", back_populates="organization")

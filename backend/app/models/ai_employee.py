@@ -17,3 +17,4 @@ class AIEmployee(BaseModel):
     system_prompt: Mapped[str] = mapped_column(Text, nullable=False, default="")
     status: Mapped[str] = mapped_column(String(50), default="active")
     organization = relationship("Organization", back_populates="ai_employees")
+    memories = relationship("Memory", back_populates="ai_employee")
