@@ -18,3 +18,4 @@ class AIEmployee(BaseModel):
     status: Mapped[str] = mapped_column(String(50), default="active")
     organization = relationship("Organization", back_populates="ai_employees")
     memories = relationship("Memory", back_populates="ai_employee")
+    knowledges = relationship("Knowledge", back_populates="ai_employee")

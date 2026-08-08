@@ -7,6 +7,7 @@ from app.api import role
 from app.api import membership
 from app.api import agent
 from app.api import memory
+from app.api import knowledge
 
 app = FastAPI(
     title=settings.app_name,
@@ -21,6 +22,7 @@ app.include_router(role.router)
 app.include_router(membership.router)
 app.include_router(agent.router)    
 app.include_router(memory.router)
+app.include_router(knowledge.router)
 
 @app.get("/")
 def root():
