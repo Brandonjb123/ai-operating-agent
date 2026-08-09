@@ -8,6 +8,7 @@ from app.api import membership
 from app.api import agent
 from app.api import memory
 from app.api import knowledge
+from app.api import workflow 
 
 app = FastAPI(
     title=settings.app_name,
@@ -23,6 +24,7 @@ app.include_router(membership.router)
 app.include_router(agent.router)    
 app.include_router(memory.router)
 app.include_router(knowledge.router)
+app.include_router(workflow.router)
 
 @app.get("/")
 def root():

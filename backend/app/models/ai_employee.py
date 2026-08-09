@@ -19,3 +19,4 @@ class AIEmployee(BaseModel):
     organization = relationship("Organization", back_populates="ai_employees")
     memories = relationship("Memory", back_populates="ai_employee")
     knowledges = relationship("Knowledge", back_populates="ai_employee")
+    workflows = relationship("Workflow", back_populates="ai_employee")
