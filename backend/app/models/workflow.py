@@ -26,3 +26,5 @@ class Workflow(BaseModel):
     # Relationships
     organization = relationship("Organization", back_populates="workflows")
     ai_employee = relationship("AIEmployee", back_populates="workflows")
+
+    executions = relationship("WorkflowExecution", back_populates="workflow")

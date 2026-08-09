@@ -6,3 +6,4 @@ from app.models.ai_employee import AIEmployee
 from app.models.memory import Memory
 from app.models.knowledge import Knowledge
 from app.models.workflow import Workflow
+from app.models.workflow_execution import WorkflowExecution

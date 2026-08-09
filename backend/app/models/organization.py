@@ -25,3 +25,4 @@ class Organization(BaseModel):
     memories = relationship("Memory", back_populates="organization")
     knowledges = relationship("Knowledge", back_populates="organization")
     workflows = relationship("Workflow", back_populates="organization")
+    workflow_executions = relationship("WorkflowExecution", back_populates="organization")

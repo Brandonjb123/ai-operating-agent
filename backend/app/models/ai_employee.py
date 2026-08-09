@@ -20,3 +20,4 @@ class AIEmployee(BaseModel):
     memories = relationship("Memory", back_populates="ai_employee")
     knowledges = relationship("Knowledge", back_populates="ai_employee")
     workflows = relationship("Workflow", back_populates="ai_employee")
+    workflow_executions = relationship("WorkflowExecution", back_populates="ai_employee")
