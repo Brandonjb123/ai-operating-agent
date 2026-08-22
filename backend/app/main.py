@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-
+from fastapi.middleware.cors import CORSMiddleware
 from app.core.config import settings
 from app.api import auth
 from app.api import organization
@@ -16,6 +16,18 @@ app = FastAPI(
     version=settings.app_version,
     description="Enterprise AI Operating Agent Platform",
 )
+
+# ==========================================
+# CORS Configuration (Phase 12.2)
+# ==========================================
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:3000"],  # Frontend development origin
+    allow_credentials=False,                  # V1 pakai localStorage, bukan cookie
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 
 # Daftarkan router autentikasi
 app.include_router(auth.router)
