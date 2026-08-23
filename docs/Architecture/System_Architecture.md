@@ -10,6 +10,8 @@ Version: 1.0
 
 1. Introduction
 
+Sprint 12 Architecture Baseline
+
 2. Architectural Principles
 
 3. High-Level Architecture
@@ -47,6 +49,35 @@ This document describes the overall technical architecture of the AI Operating A
 The architecture defines how the platform components interact, how Digital Employees execute business processes, how AI models are orchestrated, and how data flows across the system.
 
 The primary objective is to provide a scalable, modular, secure, and maintainable enterprise AI platform capable of supporting multiple organizations and Digital Employees.
+
+---
+
+# Sprint 12 Architecture Baseline
+
+This baseline records the implemented architecture at the completion of Sprint
+12 Phase 12.1–12.6. It preserves the Enterprise AI Operating System target for
+the Digital Workforce; it does not narrow the intended AOA design.
+
+- **Implemented foundation:** available as a current foundation, while further
+  production hardening or capability expansion may remain.
+- **Partial / foundation:** a supporting domain or layer exists, but the full
+  target capability is incomplete.
+- **Planned target:** an intended architectural capability that is not part of
+  the current deployed foundation.
+
+| Area | Sprint 12 status | Current architectural boundary |
+| --- | --- | --- |
+| Identity and tenancy | Implemented foundation | JWT authentication plus Organization, Role, Membership, and organization-scoped entity foundations are available. Tenant context and server-side authorization/RBAC enforcement require planned hardening. |
+| Digital Employees | Implemented foundation | CRUD and model/provider configuration are available; a Digital Employee remains the center for role, goal, instructions, memory, knowledge, workflows, tools, and permissions. |
+| Memory | Partial / foundation | CRUD and persistence exist; retrieval and runtime context integration are planned targets. |
+| Knowledge | Implemented foundation | Text-based CRUD scoped to a Digital Employee exists; ingestion, parsing, embeddings, vector search, and RAG are planned targets. |
+| Workflow | Implemented foundation | CRUD and sequential LLM steps exist; branching, retry/recovery, scheduling, parallelism, and approval are planned targets. |
+| Execution | Implemented foundation | The synchronous runtime executes sequential LLM steps, persists executions, and applies basic failure handling. Planning, reasoning, retrieval, tools, validation, approval, monitoring, and distributed execution are planned targets. |
+| Frontend | Implemented foundation | Authentication, application shell, Digital Employees, Workflows, Knowledge, and Settings foundations exist. Operational dashboard, execution center, approval, monitoring, analytics, and audit UI are planned targets. |
+| Infrastructure and integrations | Planned target | Redis, vector database, object storage, logging/metrics storage, Tool Engine, business integrations, cloud deployment, and worker/queue scaling are target architecture, not deployed foundation. |
+
+The current default-organization mechanism is temporary and must not be
+represented as production tenant selection.
 
 ---
 
@@ -131,14 +162,15 @@ The frontend is built using Next.js and communicates with the backend exclusivel
 Responsibilities include:
 
 - User Authentication
-- Dashboard
-- Chat Interface
+- Application shell and navigation
 - Digital Employee Management
 - Workflow Management
 - Knowledge Management
-- Approval Center
-- Analytics Dashboard
-- System Settings
+- Settings foundation
+
+Sprint 12 status: **Implemented foundation** for the listed UI foundations.
+The operational dashboard, chat interface, execution center, approval center,
+monitoring, analytics, and audit UI are **planned targets**.
 
 The frontend contains no business logic or AI reasoning.
 
@@ -153,12 +185,15 @@ It is implemented using FastAPI and is responsible for handling client requests,
 Responsibilities include:
 
 - REST API
-- Authentication
-- Authorization
+- JWT Authentication
 - Request Validation
-- Session Management
 - API Documentation
 - Integration with the Execution Engine
+
+Organization, Role, Membership, and organization-scoped entity foundations
+support multi-tenancy. Server-side tenant context and authorization/RBAC
+enforcement are incomplete and require planned security hardening. The current
+default-organization mechanism is temporary, not production tenant selection.
 
 The Backend Layer does not perform AI reasoning directly. It delegates AI-related operations to the Execution Engine.
 
@@ -176,24 +211,30 @@ This architecture provides consistency, observability, scalability, and maintain
 
 ## Execution Engine
 
-The Execution Engine coordinates the complete execution lifecycle of every Digital Employee.
+The Execution Engine remains the centralized execution point for Digital
+Employee work. Sprint 12 provides an **implemented foundation** that runs
+persisted sequential LLM steps synchronously, persists execution state, and
+performs basic failure handling.
 
-Responsibilities include:
+Current foundation responsibilities include:
+
+- Workflow Execution
+
+Planned target responsibilities include:
 
 - Context Initialization
-- Planning
-- Reasoning
-- Memory Retrieval
-- Knowledge Retrieval
-- Workflow Execution
+- Planning and Reasoning
+- Memory and Knowledge Retrieval
 - Tool Invocation
-- Validation
+- Validation and Approval
 - Memory Update
-- Logging
+- Logging, Monitoring, and distributed execution
 
 The Execution Engine serves as the central orchestrator for all AI operations.
 
 ## Planning Engine
+
+Status: **Planned target**.
 
 The Planning Engine determines the execution strategy before any action is performed.
 
@@ -208,6 +249,8 @@ Responsibilities include:
 The Planning Engine defines what should happen without performing execution.
 
 ## Reasoning Engine
+
+Status: **Planned target**.
 
 The Reasoning Engine transforms available context into intelligent decisions.
 
@@ -230,9 +273,10 @@ The Reasoning Engine determines the next best action during execution.
 
 ## Workflow Engine
 
-The Workflow Engine executes business workflows selected during planning.
+Sprint 12 provides an **implemented foundation** for Workflow CRUD and
+sequential LLM-only steps. The runtime executes these steps synchronously.
 
-Responsibilities include:
+Planned target responsibilities include:
 
 - Workflow Selection
 - Node Execution
@@ -241,11 +285,12 @@ Responsibilities include:
 - Retry Logic
 - Error Recovery
 
-Workflow execution is implemented using LangGraph.
+Workflow runtime does not use LangGraph in the current foundation.
 
 ## Memory Engine
 
-The Memory Engine manages retrieval and storage of execution-related memories.
+Status: **Partial / foundation**. Memory CRUD and persistence are available;
+retrieval and runtime context integration are planned targets.
 
 Responsibilities include:
 
@@ -255,24 +300,27 @@ Responsibilities include:
 - Shared Memory
 - Business Context
 
-Only relevant memories are injected into the execution context.
+Injecting relevant memories into the execution context is a planned target.
 
 ## Knowledge Engine
 
-The Knowledge Engine retrieves organization knowledge using Retrieval-Augmented Generation (RAG).
+Status: **Implemented foundation** for text-based Knowledge CRUD per Digital
+Employee. Document ingestion, parsing, embeddings, vector search, and RAG are
+planned targets.
 
-Responsibilities include:
+Planned target responsibilities include:
 
 - Semantic Search
 - Embedding Retrieval
 - Context Injection
 - Knowledge Ranking
 
-The Knowledge Engine ensures Digital Employees operate using verified organizational knowledge.
+Verified organizational knowledge retrieval is a planned target.
 
 ## Tool Engine
 
-The Tool Engine manages interactions with external systems.
+Status: **Planned target**. A Tool Engine and external tool invocation are not
+part of the current foundation.
 
 Responsibilities include:
 
@@ -292,7 +340,7 @@ Examples:
 
 ## Validation Engine
 
-The Validation Engine verifies execution results before completion.
+Status: **Planned target**.
 
 Validation includes:
 
@@ -316,6 +364,10 @@ Each service has a single responsibility and exposes well-defined interfaces to 
 
 ## Organization Service
 
+Status: **Implemented foundation** for Organization, Role, Membership, and
+organization-scoped entities. Complete tenant-context propagation and
+server-side authorization/RBAC enforcement remain planned hardening.
+
 Responsibilities include:
 
 - Organization Management
@@ -324,6 +376,8 @@ Responsibilities include:
 - Organization Settings
 
 ## Digital Employee Service
+
+Status: **Implemented foundation** for CRUD and model/provider configuration.
 
 Responsibilities include:
 
@@ -335,6 +389,10 @@ Responsibilities include:
 
 ## Workflow Service
 
+Status: **Implemented foundation** for CRUD and sequential LLM-only step
+definitions. Versioning, publishing, assignment, and advanced controls are
+planned targets.
+
 Responsibilities include:
 
 - Workflow Creation
@@ -343,6 +401,10 @@ Responsibilities include:
 - Workflow Assignment
 
 ## Knowledge Service
+
+Status: **Implemented foundation** for text-based CRUD per Digital Employee.
+Document upload, processing, collections, and version control are planned
+targets.
 
 Responsibilities include:
 
@@ -353,6 +415,9 @@ Responsibilities include:
 
 ## Memory Service
 
+Status: **Partial / foundation** for storage and persistence. Retrieval,
+cleanup, and policies are planned targets.
+
 Responsibilities include:
 
 - Memory Storage
@@ -361,6 +426,9 @@ Responsibilities include:
 - Memory Policies
 
 ## Tool Service
+
+Status: **Planned target**. Tool registration, credentials, permissions, and
+configuration are not yet implemented.
 
 Responsibilities include:
 
@@ -371,6 +439,8 @@ Responsibilities include:
 
 ## Approval Service
 
+Status: **Planned target**.
+
 Responsibilities include:
 
 - Approval Requests
@@ -380,6 +450,10 @@ Responsibilities include:
 
 ## Audit Service
 
+Status: **Partial / foundation**. Basic execution persistence and failure
+handling exist; audit logs, complete execution history, and compliance records
+are planned targets.
+
 Responsibilities include:
 
 - Audit Logs
@@ -388,6 +462,8 @@ Responsibilities include:
 - Compliance Records
 
 ## Analytics Service
+
+Status: **Planned target**.
 
 Responsibilities include:
 
@@ -406,7 +482,11 @@ Different storage technologies are used depending on the nature of the data.
 
 ## PostgreSQL
 
-Stores:
+Status: **Implemented foundation**. Stores current relational platform data,
+including Organization, User, Role, Membership, Digital Employee, Memory,
+Knowledge, Workflow, and Workflow Execution records.
+
+Target data may include:
 
 - Organizations
 - Users
@@ -418,7 +498,9 @@ Stores:
 
 ## Redis
 
-Used for:
+Status: **Planned target**; Redis is not a deployed foundation.
+
+Target uses include:
 
 - Cache
 - Session Storage
@@ -427,7 +509,9 @@ Used for:
 
 ## Vector Database
 
-Stores semantic embeddings for Retrieval-Augmented Generation (RAG).
+Status: **Planned target**; no vector database is deployed in the current
+foundation. It will store semantic embeddings for Retrieval-Augmented
+Generation (RAG).
 
 Recommended:
 
@@ -437,7 +521,9 @@ Recommended:
 
 ## Object Storage
 
-Stores:
+Status: **Planned target**; object storage is not a deployed foundation.
+
+Target stored assets include:
 
 - Documents
 - Images
@@ -446,7 +532,10 @@ Stores:
 
 ## Logging Storage
 
-Stores:
+Status: **Planned target**; dedicated logging and metrics storage is not
+deployed in the current foundation.
+
+Target stored data includes:
 
 - Execution Logs
 - API Logs
@@ -459,9 +548,13 @@ Stores:
 
 The External Services Layer connects AOA with third-party systems.
 
-These integrations allow Digital Employees to interact with real business environments.
+Status: **Planned target**. The Tool Engine and the listed business
+integrations are not part of the current foundation.
 
 ## AI Providers
+
+The current foundation includes the model/provider configuration and an
+initial LLM runtime. Target provider integrations may include:
 
 - OpenAI
 - Anthropic Claude
@@ -506,9 +599,9 @@ Security is enforced across every architectural layer.
 
 The platform authenticates users before allowing access to protected resources.
 
-Supported authentication methods:
+Status: **Implemented foundation** for JWT authentication through the current
+email/password flow. Target methods and hardening include:
 
-- Email & Password
 - OAuth 2.0
 - Google Login
 - Microsoft Login
@@ -518,7 +611,9 @@ Supported authentication methods:
 
 ## Authorization
 
-Authorization is role-based.
+Status: **Partial / foundation**. Organization, Role, and Membership entities
+exist, but tenant context and server-side authorization/RBAC enforcement remain
+incomplete and are planned hardening.
 
 Examples:
 
@@ -534,7 +629,9 @@ Permissions determine which resources and actions are accessible.
 
 ## Tenant Isolation
 
-AOA is designed as a multi-tenant platform.
+AOA is designed as a multi-tenant platform. Organization-scoped entities
+provide an **implemented foundation** for isolation; production-grade tenant
+context and server-side enforcement remain planned hardening.
 
 Each organization has isolated:
 
@@ -545,13 +642,17 @@ Each organization has isolated:
 - Workflows
 - Documents
 
-No organization can access another organization's data.
+The architecture target is that no organization can access another
+organization's data. This guarantee must not be claimed as complete until
+tenant context and server-side authorization enforcement are hardened. The
+current default-organization mechanism is temporary and is not production
+tenant selection.
 
 ---
 
 ## Secret Management
 
-Sensitive credentials are never stored in plain text.
+Status: **Planned target** for external-service credentials and integrations.
 
 Examples:
 
@@ -566,7 +667,7 @@ Secrets should be encrypted and securely managed.
 
 ## Encryption
 
-Encryption is applied both in transit and at rest.
+Status: **Planned target** for the complete production deployment posture.
 
 Examples:
 
@@ -578,7 +679,8 @@ Examples:
 
 ## Audit Logging
 
-Every important action is recorded.
+Status: **Partial / foundation**. Execution persistence and basic failure
+handling exist; complete audit logging and monitoring are planned targets.
 
 Examples:
 
@@ -594,17 +696,20 @@ Audit logs support security, compliance, and troubleshooting.
 
 # 12. Deployment Architecture
 
-The AOA platform is designed to support cloud-native deployment.
+The AOA platform is designed to support cloud-native deployment. This is a
+**planned target** architecture, not a statement of an active deployment.
 
-Primary deployment targets include:
+Target deployment options include:
 
 - Docker
-- Kubernetes (Future)
+- Kubernetes
 - AWS
 - Google Cloud
 - Microsoft Azure
 
-The platform architecture separates frontend, backend, databases, and AI services to enable independent scaling.
+The target architecture separates frontend, backend, databases, and AI
+services to enable independent scaling. Cloud deployment and horizontal
+worker/queue execution are not active foundation capabilities.
 
 Deployment environments include:
 
@@ -616,7 +721,7 @@ Deployment environments include:
 
 # 13. Scalability
 
-The platform is designed for horizontal scalability.
+The platform is designed for horizontal scalability as a **planned target**.
 
 Scalable components include:
 
@@ -626,13 +731,15 @@ Scalable components include:
 - Vector Search
 - Database Read Operations
 
-The architecture supports increasing workloads without requiring major redesign.
+Distributed workers, queues, and horizontal execution scaling remain planned
+deployment architecture.
 
 ---
 
 # 14. Monitoring & Observability
 
-Monitoring and observability provide visibility into platform health and execution performance.
+Status: **Planned target**. Dedicated monitoring, metrics storage, and
+operational observability are not deployed in the current foundation.
 
 Monitoring includes:
 

@@ -590,7 +590,7 @@ is marked complete.
 
 # 7. Sprint 12 — Frontend
 
-Status: NEXT
+Status: COMPLETE
 
 Objective:
 
@@ -630,10 +630,17 @@ Additional V1 dashboard requirements include:
 - Task Dashboard
 - Analytics Overview
 
-Sprint 12 detailed phases must be defined before implementation begins.
+Sprint 12 checkpoints:
 
-No frontend implementation should begin until the Sprint 12 scope and
-acceptance criteria are approved.
+- Phase 12.1 — Frontend Foundation: COMPLETED
+- Phase 12.2 — Authentication: COMPLETED
+- Phase 12.3 — Layout & Navigation: COMPLETED
+- Phase 12.4 — Digital Employees UI: COMPLETED
+- Phase 12.5 — Workflow UI: COMPLETED
+- Phase 12.6 — Knowledge UI: COMPLETED
+
+Checkpoint: Phase 12.6 — Knowledge UI completed; Sprint 12 frontend scope is
+complete.
 
 ---
 
@@ -827,11 +834,11 @@ architecture.
 
 Current completed sprint:
 
-Sprint 11 — Workflow Runtime / AI Engine Foundation
+Sprint 12 — Frontend
 
 Current next sprint:
 
-Sprint 12 — Frontend
+TBD — must be explicitly planned and approved.
 
 Current backend foundations:
 
@@ -869,7 +876,6 @@ Current known gaps:
 - Retry / recovery
 - Monitoring
 - Analytics
-- Production frontend
 
 ---
 
@@ -931,7 +937,7 @@ As of the current project state:
 
 Sprint 11 = COMPLETE
 
-Sprint 12 = FRONTEND
+Sprint 12 = COMPLETE
 
 Advanced workflow capabilities such as Tool Execution, Scheduling,
 Retry, Recovery, Human Approval, and related execution enhancements
@@ -956,7 +962,7 @@ through a future roadmap revision.
 │ 9       │ Knowledge Base                       │ COMPLETE     │
 │ 10      │ Workflow Definition                  │ COMPLETE     │
 │ 11      │ Workflow Runtime / AI Engine         │ COMPLETE     │
-│ 12      │ Frontend                             │ NEXT         │
+│ 12      │ Frontend                             │ COMPLETE     │
 └─────────┴──────────────────────────────────────┴──────────────┘
 
 Future sprints after Sprint 12:

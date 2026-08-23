@@ -15,16 +15,16 @@
 5. Non Goals
 6. Target Users
 7. Personas
-8. Product Scope
-9. Core Concepts
+8. Core Concepts
+9. Product Scope
 10. System Overview
 11. Functional Requirements
 12. Non Functional Requirements
 13. User Journey
-14. Modules
-15. Architecture
-16. Technology Stack
-17. Development Roadmap
+14. Core Modules
+15. Success Metrics
+16. Release Strategy
+17. Risks & Assumptions
 18. Future Vision
 
 
@@ -50,7 +50,7 @@ Rather than replacing humans, AOA aims to augment human capabilities by automati
 The platform will serve as the central operating environment for enterprise AI agents, providing governance, observability, collaboration, security, and scalability for organizations of all sizes.
 
 
-## 3. Problem Statement
+# 3. Problem Statement
 Modern businesses rely on dozens of disconnected software applications, manual workflows, repetitive administrative tasks, and human coordination.
 
 Although AI models such as ChatGPT and Claude have become powerful, most organizations still use them as standalone chatbots rather than autonomous workers capable of executing real business processes.
@@ -347,6 +347,10 @@ A Digital Employee may collaborate with humans or other Digital Employees.
 
 Knowledge represents organizational information available to Digital Employees.
 
+Sprint 12 foundation: Knowledge is managed as text-based CRUD records scoped
+to an individual Digital Employee. It is not yet a document-ingestion or RAG
+capability.
+
 Knowledge may come from:
 
 - PDF Documents
@@ -357,7 +361,8 @@ Knowledge may come from:
 - Google Drive
 - Internal Documents
 
-Knowledge is retrieved using Retrieval-Augmented Generation (RAG).
+The target V1 capability retrieves indexed knowledge using
+Retrieval-Augmented Generation (RAG).
 
 ---
 
@@ -380,7 +385,10 @@ Memory enables continuity across multiple sessions.
 
 A Workflow defines how a Digital Employee performs a task.
 
-Workflows may include:
+Sprint 12 foundation: Workflow definitions support CRUD and sequential
+LLM-only steps. The initial runtime can execute those persisted steps.
+
+Target V1 workflows may include:
 
 - Decision making
 - Tool usage
@@ -432,7 +440,11 @@ Examples:
 
 Execution is the complete lifecycle of a task.
 
-Execution includes:
+Sprint 12 foundation: execution persists and runs sequential LLM workflow
+steps, with initial failure handling. It does not yet provide planning,
+reasoning, tools, memory retrieval, or human approval.
+
+Target V1 execution includes:
 
 - Trigger
 - Planning
@@ -447,6 +459,36 @@ Execution includes:
 The first version (V1) of AOA focuses on delivering a production-ready Enterprise AI Operating System capable of managing Digital Employees within a single organization.
 
 The platform will prioritize core AI infrastructure before introducing advanced enterprise capabilities.
+
+---
+
+## Capability Status — Sprint 12 Baseline
+
+The statuses below describe the implementation baseline at the completion of
+Sprint 12. They do not reduce the target V1 scope defined in this PRD.
+
+- **Implemented foundation:** available as the current product foundation,
+  with further production capability still possible.
+- **Partial / foundation:** a domain or supporting layer exists, but the full
+  V1 capability is not complete.
+- **Planned:** part of the V1 target but not implemented in the current
+  product foundation.
+
+| Capability | Sprint 12 status | Current baseline / boundary |
+| --- | --- | --- |
+| Authentication | Implemented foundation | Authentication foundation is available. |
+| Organization and core identity | Implemented foundation | Multi-tenant core identity and organization boundaries are available. |
+| RBAC and membership | Partial / foundation | Role and membership foundations exist; complete access governance remains a V1 target. |
+| Digital Employees | Implemented foundation | Digital Employee CRUD is available. |
+| Knowledge | Implemented foundation | Text-based Knowledge CRUD per Digital Employee is available. Document ingestion, parsing, embeddings, vector search, and RAG are planned. |
+| Memory | Partial / foundation | Memory storage and domain model exist; runtime memory retrieval is planned. |
+| Workflow | Implemented foundation | Workflow CRUD with sequential LLM-only steps is available. |
+| Execution | Implemented foundation | An initial LLM workflow runtime executes persisted sequential steps. |
+| Audit and failures | Partial / foundation | Initial execution persistence and failure handling exist; complete auditability and execution history are planned. |
+| Frontend | Implemented foundation | Layout, navigation, and core UI are available. Dashboard shell is partial / foundation. |
+| Planning, reasoning, and tools | Planned | No planning engine, reasoning engine, or tool invocation capability is available yet. |
+| Advanced workflow controls | Planned | Conditional branching, retry, scheduling, and human approval are not yet available. |
+| Integrations, monitoring, analytics, and operational dashboard | Planned | These production operational capabilities are not yet available. |
 
 ---
 
@@ -485,31 +527,50 @@ The platform will prioritize core AI infrastructure before introducing advanced 
 
 ### Knowledge Management
 
-- Upload Documents
+Current foundation:
+
+- Text-based Knowledge CRUD per Digital Employee
+
+Target V1 capabilities:
+
+- Document Upload
 - Document Parsing
 - Knowledge Indexing
-- Vector Search
+- Embedding and Vector Search
 - Retrieval-Augmented Generation (RAG)
 
 ---
 
 ### Memory Management
 
+Current foundation:
+
+- Memory storage and domain model
+
+Target V1 capabilities:
+
 - Short-Term Memory
 - Long-Term Memory
 - Conversation History
 - Business Context
+- Runtime memory retrieval
 
 ---
 
 ### Workflow Management
 
-- Create Workflow
+Current foundation:
+
+- Workflow CRUD
+- Sequential LLM-only workflow steps
+
+Target V1 capabilities:
+
 - Workflow Builder
 - Conditional Logic
 - Human Approval
 - Retry Logic
-- Error Handling
+- Scheduling and error recovery
 
 ---
 
@@ -527,16 +588,25 @@ The platform will prioritize core AI infrastructure before introducing advanced 
 
 ### Execution Engine
 
+Current foundation:
+
+- Initial LLM workflow runtime for persisted sequential steps
+- Execution persistence and initial failure handling
+
+Target V1 capabilities:
+
 - Execute Tasks
 - Tool Calling
 - Planning
 - Reasoning
-- Logging
-- Status Tracking
+- Logging and Status Tracking
+- Runtime memory and knowledge retrieval
 
 ---
 
 ### Monitoring
+
+Target V1 capabilities (planned):
 
 - Agent Status
 - Active Tasks
@@ -548,6 +618,12 @@ The platform will prioritize core AI infrastructure before introducing advanced 
 ---
 
 ### Dashboard
+
+Current foundation:
+
+- Dashboard shell
+
+Target V1 capabilities:
 
 - Organization Dashboard
 - Employee Dashboard
@@ -613,7 +689,9 @@ Each Digital Employee contains:
 
 ### Knowledge Layer
 
-Provides organizational knowledge through Retrieval-Augmented Generation (RAG).
+Sprint 12 provides text-based Knowledge CRUD per Digital Employee. The target
+V1 Knowledge Layer provides organizational knowledge through
+Retrieval-Augmented Generation (RAG).
 
 Knowledge sources include:
 
@@ -630,7 +708,9 @@ Knowledge sources include:
 
 Defines how Digital Employees perform tasks.
 
-Supports:
+Sprint 12 foundation supports persisted sequential LLM-only workflow steps.
+
+Target V1 supports:
 
 - Sequential execution
 - Conditional branching
@@ -642,7 +722,8 @@ Supports:
 
 ### Execution Engine
 
-Responsible for:
+Sprint 12 foundation is responsible for executing persisted sequential LLM
+workflow steps. The target V1 Execution Engine is responsible for:
 
 - Planning
 - Reasoning
@@ -732,6 +813,9 @@ This section defines the core functional capabilities that AOA must provide in V
 
 The system shall allow users to securely authenticate using email and password.
 
+Sprint 12 status: **Implemented foundation** for authentication. Full session
+management and password-reset capability remain target V1 requirements.
+
 Capabilities:
 
 - Register
@@ -758,6 +842,10 @@ Capabilities:
 ## FR-003 User Management
 
 The system shall support organization users.
+
+Sprint 12 status: **Partial / foundation**. Core multi-tenant identity, roles,
+and memberships exist; complete invitation, removal, and permission-governance
+flows remain target V1 requirements.
 
 Capabilities:
 
@@ -786,6 +874,10 @@ Examples:
 
 The system shall allow users to create and manage Digital Employees.
 
+Sprint 12 status: **Implemented foundation** for Digital Employee CRUD.
+Department assignment, enable/disable controls, and the broader configuration
+experience remain target V1 requirements where not yet available.
+
 Capabilities:
 
 - Create Employee
@@ -802,7 +894,11 @@ Capabilities:
 
 The system shall provide centralized knowledge for Digital Employees.
 
-Capabilities:
+Sprint 12 status: **Implemented foundation** for text-based Knowledge CRUD
+scoped to a Digital Employee. This foundation does not ingest or retrieve
+documents.
+
+Target V1 capabilities:
 
 - Upload Documents
 - Delete Documents
@@ -823,6 +919,9 @@ Supported Sources:
 
 The system shall maintain memory for Digital Employees.
 
+Sprint 12 status: **Partial / foundation**. Memory storage and the domain
+model exist; runtime memory retrieval and context assembly remain planned.
+
 Capabilities:
 
 - Session Memory
@@ -836,19 +935,31 @@ Capabilities:
 
 The system shall allow users to configure workflows.
 
-Capabilities:
+Sprint 12 status: **Implemented foundation** for Workflow CRUD with
+sequential LLM-only steps. Conditional branching, approval, retry, and
+scheduling remain planned target V1 workflow capabilities.
+
+Current foundation capabilities:
 
 - Create Workflow
 - Edit Workflow
+- Sequential LLM-only steps
+
+Target V1 capabilities:
+
 - Conditional Branching
 - Human Approval
 - Retry Logic
+- Scheduling
 
 ---
 
 ## FR-009 Tool Integration
 
 The system shall integrate with external services.
+
+Sprint 12 status: **Planned**. No external tool integrations or tool
+invocation capability are available yet.
 
 Examples:
 
@@ -865,7 +976,13 @@ Examples:
 
 Digital Employees shall execute assigned tasks.
 
-Execution includes:
+Sprint 12 status: **Implemented foundation** for an initial runtime that
+executes persisted sequential LLM workflow steps, with execution persistence
+and initial failure handling. Planning, reasoning, tool calls, runtime memory
+retrieval, and runtime knowledge/RAG retrieval remain planned target V1
+capabilities.
+
+Target V1 execution includes:
 
 - Planning
 - Reasoning
@@ -878,6 +995,9 @@ Execution includes:
 ## FR-011 Monitoring
 
 The platform shall monitor all Digital Employees.
+
+Sprint 12 status: **Planned**. Operational monitoring, execution history,
+token usage, and cost monitoring are not yet available.
 
 Capabilities:
 
@@ -893,6 +1013,10 @@ Capabilities:
 
 The platform shall record every important activity.
 
+Sprint 12 status: **Partial / foundation**. Initial execution persistence and
+failure handling exist; complete audit logging and operational execution
+history remain planned.
+
 Examples:
 
 - User Login
@@ -906,6 +1030,10 @@ Examples:
 ## FR-013 Dashboard
 
 The platform shall provide dashboards.
+
+Sprint 12 status: **Partial / foundation**. A dashboard shell is available;
+the operational organization, workforce, task, and analytics dashboards remain
+planned.
 
 Dashboards include:
 
@@ -1430,19 +1558,19 @@ AOA will be developed incrementally using milestone-based releases.
 
 ## Version 0.1
 
-Foundation
+Foundation — **implemented foundation**
 
-- Authentication
-- Organization
-- Basic Dashboard
+- Authentication foundation
+- Organization and multi-tenant core identity foundation
+- Dashboard shell foundation
 
 ---
 
 ## Version 0.2
 
-Digital Employee
+Digital Employee — **implemented foundation**
 
-- Employee Management
+- Digital Employee CRUD
 - Prompt Configuration
 - Goal Configuration
 
@@ -1450,45 +1578,48 @@ Digital Employee
 
 ## Version 0.3
 
-Knowledge
+Knowledge — **foundation implemented; advanced capability planned**
 
-- Document Upload
-- Embedding
-- RAG
-- Vector Search
+- Text-based Knowledge CRUD per Digital Employee is implemented
+- Document ingestion and parsing are planned
+- Embedding, vector search, and RAG are planned
 
 ---
 
 ## Version 0.4
 
-Workflow
+Workflow — **foundation implemented; advanced capability planned**
 
-- Workflow Builder
-- Tool Calling
-- Human Approval
+- Workflow CRUD with sequential LLM-only steps is implemented
+- Conditional workflow, retry, scheduling, and human approval are planned
+- Tool calling is planned with the integration and execution capabilities
 
 ---
 
 ## Version 0.5
 
-Execution Engine
+Execution Engine — **initial foundation implemented; target capability planned**
 
-- Planning
-- Memory
-- Reasoning
-- Logging
+- Initial LLM workflow runtime is implemented
+- Planning, reasoning, runtime memory retrieval, tools, monitoring, and
+  production logging remain planned
 
 ---
 
 ## Version 1.0
 
-Production Release
+Production Release — **planned**
 
 - Enterprise Dashboard
 - Monitoring
 - Analytics
 - Stable APIs
 - Production Deployment
+
+V1 remains the long-term target scope of this PRD. The Sprint 12 baseline
+must not be interpreted as completion of document processing, RAG, advanced
+workflow controls, integrations, operational monitoring, analytics, execution
+history, or operational dashboards.
 
 
 # 17. Risks & Assumptions
