@@ -834,7 +834,7 @@ architecture.
 
 Current completed sprint:
 
-Sprint 12 — Frontend
+Sprint 13 — Dashboard Foundation
 
 Current next sprint:
 
@@ -963,8 +963,9 @@ through a future roadmap revision.
 │ 10      │ Workflow Definition                  │ COMPLETE     │
 │ 11      │ Workflow Runtime / AI Engine         │ COMPLETE     │
 │ 12      │ Frontend                             │ COMPLETE     │
+│ 13      │ Dashboard Foundation                 │ COMPLETE     │
 └─────────┴──────────────────────────────────────┴──────────────┘
 
-Future sprints after Sprint 12:
+Future sprints after Sprint 13:
 
 TBD — must be explicitly planned and approved.

@@ -776,3 +776,31 @@ Future capabilities may include:
 - Cross-Organization AI Collaboration
 
 The architecture intentionally separates business logic from AI technologies, allowing new AI models and frameworks to be adopted without redesigning the platform.
+
+## Sprint 13 Dashboard Foundation Update
+
+- Frontend dashboard consumes organization-scoped dashboard summary API.
+- Backend provides organization-scoped aggregate metrics.
+- Backend verifies authenticated organization membership.
+- Dashboard metrics are retrieved through REST API.
+- Frontend remains presentation-only.
+- No dashboard-specific database entity was introduced.
+- No migration was introduced.
+
+Data flow:
+
+Organization Context
+↓
+Frontend Dashboard
+↓
+GET /dashboard/summary
+↓
+Authentication + Membership Authorization
+↓
+Dashboard Service
+↓
+Organization-scoped aggregate query
+↓
+Dashboard metrics
+
+Full operational dashboard, monitoring, analytics, execution center, approval center, and audit UI remain future targets.

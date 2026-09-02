@@ -10,6 +10,7 @@ from app.api import memory
 from app.api import knowledge
 from app.api import workflow 
 from app.api import execution
+from app.api import dashboard
 
 app = FastAPI(
     title=settings.app_name,
@@ -39,6 +40,7 @@ app.include_router(memory.router)
 app.include_router(knowledge.router)
 app.include_router(workflow.router)
 app.include_router(execution.router)
+app.include_router(dashboard.router)
 
 @app.get("/")
 def root():

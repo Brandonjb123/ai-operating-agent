@@ -1663,3 +1663,23 @@ Future capabilities include:
 - Global Multi-Region Deployment
 
 The long-term vision is for organizations to manage Digital Employees with the same structure, governance, accountability, and operational visibility as human employees.
+
+## FR-013 Dashboard
+
+### Sprint 13 Status: Implemented Foundation
+
+Current implemented foundation:
+- Organization-scoped dashboard summary
+- Five organization-level metrics
+- Authenticated access
+- Membership-based authorization
+- Tenant-isolated dashboard data
+- Dashboard metric-card presentation
+
+Target V1 remains:
+- Organization Dashboard
+- Employee Dashboard
+- Task Dashboard
+- Analytics Overview
+
+Note: Full V1 Dashboard is not yet complete. Sprint 13 only closed the Dashboard Foundation scope.
