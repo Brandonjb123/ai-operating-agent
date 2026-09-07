@@ -90,17 +90,16 @@ class WorkflowRuntime:
                 if not executor:
                     raise ValueError(f"Unknown step type: {step_type}")
 
-                context.current_step_id = step_id
+                context.set_current_step(step_id)
                 result = executor.execute(step, context)
 
                 # Simpan hasil
-                context.step_results.append(result)
+                context.add_step_result(result)
                 if not result.success:
                     raise RuntimeError(result.error or "Step failed")
 
                 # Update variables untuk step berikutnya
-                if result.output:
-                    context.variables.update(result.output)
+                context.update_variables(result.output or {})
 
             # Semua langkah sukses
             execution.status = "completed"
@@ -114,7 +113,7 @@ class WorkflowRuntime:
                         "error": r.error,
                         "metadata": r.metadata,
                     }
-                    for r in context.step_results
+                    for r in context.get_step_results()
                 ],
             }
             execution.completed_at = datetime.now(timezone.utc)
